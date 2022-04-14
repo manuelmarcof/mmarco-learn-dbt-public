@@ -1,17 +1,16 @@
-
-
-With sum_by_date as
+with orders as
 (
-SELECT
-    O_ORDERDATE,
-    sum(O_TOTALPRICE) sum_price
-FROM
-    "SNOWFLAKE_SAMPLE_DATA"."TPCH_SF10"."ORDERS"
-Group by 1
-Order by 1 ASC
+  select *
+  from {{source('sample', 'orders')}}
 )
-Select
+SELECT DISTINCT
     O_ORDERDATE,
-    sum(sum_price)  over (order by O_ORDERDATE) running_total
+    sum(O_TOTALPRICE) over (order by o_orderdate) running_total
 FROM
-    sum_by_date
+    orders
+
+{% if target.name == 'dev' %}
+WHERE year(o_orderdate) = 1996
+{% endif %}
+
+Order by 1 ASC

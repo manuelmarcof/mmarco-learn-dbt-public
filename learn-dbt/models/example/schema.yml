@@ -1,6 +1,19 @@
 
 version: 2
 
+sources:
+  - name: sample
+    database: SNOWFLAKE_SAMPLE_DATA
+    schema: TPCH_SF1
+    tables:
+      - name: customer
+        columns:
+          - name: c_custkey
+            tests:
+              - unique
+              - not_null
+      - name: orders
+
 models:
   - name: my_first_dbt_model
     description: "A starter dbt model"
@@ -18,7 +31,6 @@ models:
         description: "The primary key for this table"
         tests:
           - unique
-          - not_null
           - relationships:
               to: ref('my_first_dbt_model')
               field: id
