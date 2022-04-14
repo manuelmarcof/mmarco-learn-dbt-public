@@ -2,7 +2,7 @@ With sample_customer as (
   SELECT *
   FROM {{ source('sample', 'customer') }}
 ),
-With sample_orders as (
+sample_orders as (
   SELECT *
   FROM {{ source('sample', 'orders') }}
 )
